@@ -6,18 +6,21 @@ export type Database = {
           id: string;
           username: string;
           is_admin: boolean;
+          avatar_url: string | null;
           created_at: string;
         };
         Insert: {
           id: string;
           username: string;
           is_admin?: boolean;
+          avatar_url?: string | null;
           created_at?: string;
         };
         Update: {
           id?: string;
           username?: string;
           is_admin?: boolean;
+          avatar_url?: string | null;
           created_at?: string;
         };
         Relationships: [];
