@@ -176,6 +176,7 @@ export default async function RootLayout({
               — by students, for students. Not affiliated with Virtual
               University of Pakistan.
             </p>
+            <p>Created by Malik Hasnain</p>
             <p>
               Past papers · MCQ practice · Handouts ·{" "}
               <Link href="/gpa" className="underline hover:text-emerald-600">
