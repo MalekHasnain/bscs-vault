@@ -24,7 +24,11 @@ You do these once. No coding needed — everything is copy-paste.
 4. Open `supabase/schema.sql` from this project, **copy everything**, paste
    into the query box, click **Run**. It will create all 4 tables, security
    rules (RLS), and seed the 12 official VU semester-1 subjects.
-5. Copy your keys: **Project Settings → API**:
+5. Then open `supabase/seed-questions.sql`, **copy everything**, paste into a
+   **New query**, **Run**. This loads 39 real past-paper questions (32 MCQs +
+   7 short questions across CS101, CS201, ENG101, MTH202, MTH5101, ECO401,
+   PSY101) so the site launches with a working Practice engine.
+6. Copy your keys: **Project Settings → API**:
    - `Project URL` → that's `NEXT_PUBLIC_SUPABASE_URL`
    - `anon public` key → that's `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
