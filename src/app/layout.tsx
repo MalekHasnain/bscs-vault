@@ -80,14 +80,18 @@ export default async function RootLayout({
               >
                 GPA Tools
               </Link>
-              {isAdmin && (
-                <Link
-                  href="/admin"
-                  className="rounded-lg px-3 py-2 text-black/70 transition hover:bg-black/5 dark:text-white/70 dark:hover:bg-white/10"
-                >
-                  Admin
-                </Link>
-              )}
+              <Link
+                href="/notices"
+                className="hidden rounded-lg px-3 py-2 text-black/70 transition hover:bg-black/5 hover:text-black dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white md:block"
+              >
+                Notices
+              </Link>
+              <Link
+                href="/faq"
+                className="hidden rounded-lg px-3 py-2 text-black/70 transition hover:bg-black/5 hover:text-black dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white sm:block"
+              >
+                FAQ
+              </Link>
               {user ? (
                 <div className="flex items-center gap-2">
                   <Link
@@ -96,24 +100,52 @@ export default async function RootLayout({
                   >
                     + Submit
                   </Link>
-                  <Link
-                    href="/dashboard"
-                    title={username}
-                    className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-emerald-500/50 transition hover:ring-emerald-500"
-                  >
-                    {avatarUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={avatarUrl}
-                        alt={username}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-emerald-500 to-sky-500 text-xs font-bold text-white">
-                        {username.slice(0, 2).toUpperCase()}
-                      </span>
-                    )}
-                  </Link>
+                  <details className="group relative">
+                    <summary
+                      className="h-9 w-9 cursor-pointer list-none overflow-hidden rounded-full ring-2 ring-emerald-500/50 transition hover:ring-emerald-500 [&::-webkit-details-marker]:hidden"
+                      title={username}
+                    >
+                      {avatarUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={avatarUrl}
+                          alt={username}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-emerald-500 to-sky-500 text-xs font-bold text-white">
+                          {username.slice(0, 2).toUpperCase()}
+                        </span>
+                      )}
+                    </summary>
+                    <div className="absolute right-0 z-50 mt-2 w-44 overflow-hidden rounded-xl border border-black/10 bg-white shadow-lg dark:border-white/10 dark:bg-[#141414]">
+                      <div className="border-b border-black/5 px-4 py-2.5 text-xs font-semibold text-black/50 dark:border-white/10 dark:text-white/50">
+                        {username}
+                      </div>
+                      <Link
+                        href="/dashboard"
+                        className="block px-4 py-2.5 text-sm hover:bg-black/5 dark:hover:bg-white/10"
+                      >
+                        My Dashboard
+                      </Link>
+                      {isAdmin && (
+                        <Link
+                          href="/admin"
+                          className="block px-4 py-2.5 text-sm hover:bg-black/5 dark:hover:bg-white/10"
+                        >
+                          Admin
+                        </Link>
+                      )}
+                      <form action="/auth/signout" method="post">
+                        <button
+                          type="submit"
+                          className="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-500/10 dark:text-red-400"
+                        >
+                          Log out
+                        </button>
+                      </form>
+                    </div>
+                  </details>
                 </div>
               ) : (
                 <Link
