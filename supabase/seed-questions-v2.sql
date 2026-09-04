@@ -126,7 +126,7 @@ from public.subjects where code = 'ENG101';
 
 insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
 select id, 'mcq', 'Read the sentence carefully and decide which of the five choices provided comes closest in meaning to the word underlined. Sue affected to like her only until she found a better friend.',
-  '["Agreed", "Pretended", "Wanted", "Bothered"]'::jsonb, 0, 'midterm', 2010, 'approved'
+  '["Agreed", "Pretended", "Wanted", "Bothered"]'::jsonb, 1, 'midterm', 2010, 'approved'
 from public.subjects where code = 'ENG101';
 
 insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
@@ -140,11 +140,6 @@ select id, 'mcq', 'Complete the following sentence by choosing the correct optio
 from public.subjects where code = 'ENG101';
 
 insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
-select id, 'mcq', 'which individuals have little control?',
-  '["Cognitive model", "Psychodynamic model", "Humanistic model", "Behavioral model"]'::jsonb, 1, 'midterm', null, 'approved'
-from public.subjects where code = 'PSY101';
-
-insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
 select id, 'mcq', 'Which one of the following schools of thought focused on what the mind does and how it does?',
   '["Structuralism", "Functionalism", "Gestalt", "Behaviorist"]'::jsonb, 1, 'midterm', null, 'approved'
 from public.subjects where code = 'PSY101';
@@ -152,11 +147,6 @@ from public.subjects where code = 'PSY101';
 insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
 select id, 'mcq', 'Which one of the following drugs is a stimulant?',
   '["Nicotine", "Lorazepam", "Barbiturates", "LSD"]'::jsonb, 0, 'midterm', null, 'approved'
-from public.subjects where code = 'PSY101';
-
-insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
-select id, 'mcq', 'type of defense mechanism?',
-  '["Projection", "Displacement", "Repression", "Sublimation"]'::jsonb, 3, 'midterm', null, 'approved'
 from public.subjects where code = 'PSY101';
 
 insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
@@ -175,16 +165,6 @@ select id, 'mcq', 'Range of function f(x)=e^x is ___________',
 from public.subjects where code = 'MTH202';
 
 insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
-select id, 'mcq', 'Composite relation symbolically written as _______',
-  '["SoR={(a,c)aeA, ceC, 3eB, (a,b)eR and (b,c)eS}", "RoS={(a,c)aeA, ceC, 3eB, (a,b)eR and (b,c)eS}", "SoR={(a,b)aeA, beB, (a,c)eR and (c,b)eS}", "RoS={(b,c)beB, ceC, (a,b)eR and (a,c)eS}"]'::jsonb, 0, 'midterm', null, 'approved'
-from public.subjects where code = 'MTH202';
-
-insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
-select id, 'mcq', 'If x=17(mod 5) which of the following integers are valid solution for x ?',
-  '["12", "2", "7", "17"]'::jsonb, 0, 'midterm', null, 'approved'
-from public.subjects where code = 'MTH202';
-
-insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
 select id, 'mcq', 'Range of the relation {(0,1),(3,22),(90,34)}',
   '["{1,22,34}", "{0,3,90}", "{1,22,34,90}", "{0,1,3,22,34,90}"]'::jsonb, 0, 'midterm', null, 'approved'
 from public.subjects where code = 'MTH202';
@@ -195,21 +175,6 @@ select id, 'mcq', 'Operation of subtraction is a binary operation on the set of 
 from public.subjects where code = 'MTH202';
 
 insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
-select id, 'mcq', 'The value of I d= N',
-  '["1", "2", "3", "4"]'::jsonb, 0, 'midterm', null, 'approved'
-from public.subjects where code = 'MTH5101';
-
-insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
-select id, 'mcq', 'The region bounded by the curves y = sqrt(x), y=1 and x=4',
-  '["1", "2", "5", "3"]'::jsonb, 3, 'midterm', null, 'approved'
-from public.subjects where code = 'MTH5101';
-
-insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
-select id, 'mcq', 'Find the area of the region between the x-axis, the f(z) = 2^z - 2^z - 22, 1\u003cz\u003c2',
-  '["3", "5", "37/12", "15"]'::jsonb, 2, 'midterm', null, 'approved'
-from public.subjects where code = 'MTH5101';
-
-insert into public.questions (subject_id, q_type, question_text, options, correct_option, paper_type, paper_year, status)
 select id, 'mcq', 'First fundamental theorem of calculus tells us how to evaluate the ...... in a quick way.',
   '["Definite integral", "None of these", "Differential", "Indefinite integral"]'::jsonb, 0, 'midterm', null, 'approved'
 from public.subjects where code = 'MTH5101';
@@ -218,3 +183,4 @@ insert into public.questions (subject_id, q_type, question_text, options, correc
 select id, 'mcq', 'The volume of a cylinder is the area of a cross section of the cylinder multiplied by the ______ of the cylinder.',
   '["Diameter", "Height", "Radius", "Base"]'::jsonb, 1, 'midterm', null, 'approved'
 from public.subjects where code = 'MTH5101';
+
