@@ -33,6 +33,7 @@ export default function PracticePage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
+  const [mcqCounts, setMcqCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
     supabase
@@ -41,17 +42,38 @@ export default function PracticePage() {
       .order("semester")
       .order("code")
       .then(({ data }) => setSubjects((data as Subject[]) ?? []));
+    // count approved MCQs per subject for the cards
+    supabase
+      .from("questions")
+      .select("subject_id")
+      .eq("status", "approved")
+      .eq("q_type", "mcq")
+      .limit(1000)
+      .then(({ data }) => {
+        const counts: Record<string, number> = {};
+        for (const row of (data ?? []) as { subject_id: string }[]) {
+          counts[row.subject_id] = (counts[row.subject_id] ?? 0) + 1;
+        }
+        setMcqCounts(counts);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function loadQuestions() {
+  // deep link like /practice?subject=CS101 auto-loads
+  useEffect(() => {
+    if (subjectFilter) void loadQuestions(subjectFilter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subjectFilter]);
+
+  async function loadQuestions(code?: string) {
+    const target = code ?? selected;
     setLoading(true);
     let query = supabase
       .from("questions")
       .select("*")
       .eq("status", "approved")
       .eq("q_type", "mcq");
-    if (selected) {
+    if (target) {
       const { data: subj } = await supabase
         .from("subjects")
         .select("id")
@@ -289,36 +311,56 @@ export default function PracticePage() {
   }
 
   /* ---------- Setup screen ---------- */
+  const tierOrder: Record<string, number> = {
+    required: 0,
+    deficiency: 1,
+    elective: 2,
+  };
+  const tierLabel: Record<string, string> = {
+    required: "Compulsory",
+    deficiency: "Deficiency",
+    elective: "Elective",
+  };
+  const byTier = subjects.reduce<Record<string, Subject[]>>((acc, s) => {
+    const t = s.course_type ?? "required";
+    (acc[t] ??= []).push(s);
+    return acc;
+  }, {});
+  const tiers = Object.entries(byTier).sort(
+    (a, b) => (tierOrder[a[0]] ?? 9) - (tierOrder[b[0]] ?? 9),
+  );
+
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10">
+    <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-3xl font-bold">Practice MCQs</h1>
-      <p className="mt-2 text-black/60 dark:text-white/60">
+      <p className="mt-2 max-w-2xl text-black/60 dark:text-white/60">
         Every question here was submitted from a real VU past paper. Pick a
-        subject, choose how many, and go.
+        subject card to load its MCQs, choose how many, and go.
       </p>
 
-      <div className="mt-8 flex flex-col gap-4">
-        <div>
-          <label className="text-sm font-medium">Subject</label>
-          <select
-            value={selected}
-            onChange={(e) => setSelected(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-black/15 bg-transparent px-3 py-2.5 dark:border-white/20"
+      {/* Quick controls */}
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <div className="inline-flex overflow-hidden rounded-xl border border-black/15 dark:border-white/20">
+          <button
+            onClick={() => {
+              setSelected("");
+              void loadQuestions("");
+            }}
+            className={`px-4 py-2 text-sm font-medium transition ${
+              selected === ""
+                ? "bg-emerald-600 text-white"
+                : "hover:bg-black/5 dark:hover:bg-white/10"
+            }`}
           >
-            <option value="">All subjects</option>
-            {subjects.map((s) => (
-              <option key={s.id} value={s.code}>
-                {s.code} — {s.title}
-              </option>
-            ))}
-          </select>
+            All subjects
+          </button>
         </div>
-        <div>
-          <label className="text-sm font-medium">Number of questions</label>
+        <label className="flex items-center gap-2 text-sm">
+          <span className="text-black/60 dark:text-white/60">Questions:</span>
           <select
             value={count}
             onChange={(e) => setCount(Number(e.target.value))}
-            className="mt-1 w-full rounded-lg border border-black/15 bg-transparent px-3 py-2.5 dark:border-white/20"
+            className="rounded-lg border border-black/15 bg-transparent px-3 py-1.5 dark:border-white/20"
           >
             {[5, 10, 15, 20, 30, 50].map((n) => (
               <option key={n} value={n}>
@@ -326,41 +368,99 @@ export default function PracticePage() {
               </option>
             ))}
           </select>
-        </div>
-        <button
-          onClick={loadQuestions}
-          disabled={loading}
-          className="rounded-xl border border-black/15 px-5 py-2.5 font-medium hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
-        >
-          {loading ? "Loading…" : "Load questions"}
-        </button>
+        </label>
+        {loading && (
+          <span className="text-sm text-black/50 dark:text-white/50">
+            Loading…
+          </span>
+        )}
+      </div>
 
-        {questions.length > 0 && (
-          <div className="rounded-xl border border-black/10 p-4 dark:border-white/10">
+      {/* Subject cards by tier */}
+      <div className="mt-8 space-y-10">
+        {tiers.map(([tier, list]) => (
+          <section key={tier}>
+            <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-black/50 dark:text-white/50">
+              {tierLabel[tier] ?? tier}
+              <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs font-medium normal-case tracking-normal dark:bg-white/10">
+                {list.length}
+              </span>
+            </h2>
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+              {list.map((s) => {
+                const n = mcqCounts[s.id] ?? 0;
+                const active = selected === s.code;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => {
+                      setSelected(s.code);
+                      void loadQuestions(s.code);
+                    }}
+                    className={`group rounded-2xl border p-4 text-left transition ${
+                      active
+                        ? "border-emerald-500 bg-emerald-500/10 shadow-md shadow-emerald-500/10"
+                        : "border-black/10 hover:-translate-y-0.5 hover:border-emerald-500/60 hover:shadow-md dark:border-white/10"
+                    } ${n === 0 ? "opacity-55" : ""}`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="font-mono text-lg font-bold">
+                        {s.code}
+                      </span>
+                      {active && (
+                        <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-bold uppercase text-white">
+                          Selected
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1 line-clamp-2 min-h-[2.5rem] text-xs text-black/60 dark:text-white/60">
+                      {s.title}
+                    </p>
+                    <p
+                      className={`mt-2 text-sm font-semibold ${
+                        n > 0
+                          ? "text-emerald-600 dark:text-emerald-400"
+                          : "text-black/40 dark:text-white/40"
+                      }`}
+                    >
+                      {n > 0 ? `${n} MCQs` : "No MCQs yet"}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      {/* Loaded pool → start */}
+      {questions.length > 0 && (
+        <div className="sticky bottom-4 mt-8 rounded-2xl border border-black/10 bg-white/90 p-4 shadow-lg backdrop-blur dark:border-white/10 dark:bg-neutral-900/90">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="font-medium">
               {questions.length} MCQs available
               {selected ? ` for ${selected}` : " across all subjects"}.
             </p>
             <button
               onClick={start}
-              className="mt-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-6 py-3 font-semibold text-white shadow-md shadow-emerald-500/25 hover:shadow-lg"
+              className="rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-6 py-3 font-semibold text-white shadow-md shadow-emerald-500/25 hover:shadow-lg"
             >
-              Start practice
+              Start practice →
             </button>
           </div>
-        )}
-        {questions.length === 0 && !loading && selected !== "" && (
-          <p className="text-sm text-black/60 dark:text-white/60">
-            No MCQs for this subject yet.{" "}
-            <a
-              href={`/submit?subject=${selected}&type=mcq`}
-              className="text-emerald-600 hover:underline dark:text-emerald-400"
-            >
-              Add the first one →
-            </a>
-          </p>
-        )}
-      </div>
+        </div>
+      )}
+      {questions.length === 0 && !loading && selected !== "" && (
+        <p className="mt-8 text-sm text-black/60 dark:text-white/60">
+          No MCQs for {selected} yet.{" "}
+          <a
+            href={`/submit?subject=${selected}&type=mcq`}
+            className="text-emerald-600 hover:underline dark:text-emerald-400"
+          >
+            Add the first one →
+          </a>
+        </p>
+      )}
     </div>
   );
 }
