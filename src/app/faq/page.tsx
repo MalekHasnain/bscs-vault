@@ -5,6 +5,7 @@ export const metadata = {
   description:
     "Answers to the most common questions from students who just joined Virtual University — LMS, lectures, handouts, exams, grading, fees.",
 };
+export const revalidate = 3600; // ISR
 
 export default function FaqPage() {
   return (

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase-server";
 
 export const metadata = { title: "Subjects" };
+export const revalidate = 3600; // ISR: rebuild every hour for fresh counts
 
 const ALL_SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8];
 

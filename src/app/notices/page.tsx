@@ -5,6 +5,7 @@ export const metadata = {
   description:
     "Fall 2026 key dates for VU BSCS students — admissions, course selection, exams.",
 };
+export const revalidate = 3600; // ISR for date freshness
 
 function formatDate(iso: string) {
   return new Date(iso + "T00:00:00").toLocaleDateString("en-GB", {

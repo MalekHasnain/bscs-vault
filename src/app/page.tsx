@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase-server";
 import { FALL_2026_NOTICES } from "@/lib/notices";
 import { NEW_STUDENT_FAQS } from "@/lib/faqs";
 
+export const revalidate = 3600; // ISR: keep stats and teasers fresh
+
 const features = [
   {
     title: "Past-Paper Bank",
