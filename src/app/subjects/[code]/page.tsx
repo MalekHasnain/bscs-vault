@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
+import { VOCAB_BY_CODE } from "@/lib/vocabulary";
 
 type Params = { code: string };
 
@@ -70,6 +71,14 @@ export default async function SubjectPage({
         >
           + Add a past-paper question
         </Link>
+        {VOCAB_BY_CODE[subject.code] && (
+          <Link
+            href={`/vocabulary?subject=${subject.code}`}
+            className="rounded-lg border border-emerald-600/40 px-4 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-500/10 dark:text-emerald-400"
+          >
+            🧠 {VOCAB_BY_CODE[subject.code].terms.length} vocabulary terms
+          </Link>
+        )}
       </div>
 
       {/* Handouts */}

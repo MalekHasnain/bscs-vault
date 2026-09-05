@@ -75,6 +75,13 @@ export default async function RootLayout({
                 Practice
               </Link>
               <Link
+                href="/vocabulary"
+                className="rounded-lg px-3 py-2 text-black/70 transition hover:bg-black/5 hover:text-black dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
+              >
+                <span className="sm:hidden">Vocab</span>
+                <span className="hidden sm:inline">Vocabulary</span>
+              </Link>
+              <Link
                 href="/gpa"
                 className="rounded-lg px-3 py-2 text-black/70 transition hover:bg-black/5 hover:text-black dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
               >
@@ -178,7 +185,7 @@ export default async function RootLayout({
             </p>
             <p>Created by Malik Hasnain</p>
             <p>
-              Past papers · MCQ practice · Handouts ·{" "}
+              Past papers · MCQ practice · Vocabulary · Handouts ·{" "}
               <Link href="/gpa" className="underline hover:text-emerald-600">
                 GPA &amp; CGPA tools
               </Link>

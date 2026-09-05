@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase-server";
 import { FALL_2026_NOTICES } from "@/lib/notices";
 import { NEW_STUDENT_FAQS } from "@/lib/faqs";
+import { TOTAL_VOCAB_TERMS } from "@/lib/vocabulary";
 
 export const revalidate = 3600; // ISR: keep stats and teasers fresh
 
@@ -38,6 +39,14 @@ const features = [
     icon: "📚",
     gradient: "from-amber-500/15 to-amber-500/5",
   },
+  {
+    title: "Vocabulary Flashcards",
+    desc: `${TOTAL_VOCAB_TERMS} key terms with exam-ready definitions for every semester-1 subject — search the list or drill flip-cards.`,
+    href: "/vocabulary",
+    cta: "Learn the terms",
+    icon: "🧠",
+    gradient: "from-rose-500/15 to-rose-500/5",
+  },
 ];
 
 export default async function Home() {
@@ -66,8 +75,9 @@ export default async function Home() {
           </span>
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-black/60 dark:text-white/60">
-          A free student-built vault with real past papers, MCQ practice, 
-          GPA tools and handouts — made by a semester-1 student for everyone.
+          A free student-built vault with real past papers, MCQ practice,
+          vocabulary flashcards, GPA tools and handouts — made by a
+          semester-1 student for everyone.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
@@ -91,7 +101,11 @@ export default async function Home() {
           <Link
             key={f.title}
             href={f.href}
-            className={`group relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-white/10 ${f.gradient}`}
+            className={`group relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-white/10 ${f.gradient} ${
+              index === features.length - 1 && features.length % 2 === 1
+                ? "sm:col-span-2 lg:col-span-2"
+                : ""
+            }`}
           >
             <div className="text-4xl mb-4 transition-transform group-hover:scale-110">{f.icon}</div>
             <h3 className="text-lg font-semibold leading-tight">{f.title}</h3>
