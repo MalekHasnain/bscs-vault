@@ -11,13 +11,19 @@ export type VocabTerm = {
 export type VocabSubject = {
   code: string;
   title: string;
+  semester: number;
   terms: VocabTerm[];
 };
+
+// Semesters that have vocabulary data. Others show "coming soon".
+export const VOCAB_SEMESTERS = [1];
+export const TOTAL_SEMESTERS = 8;
 
 export const VOCABULARY: VocabSubject[] = [
   {
     code: "CS101",
     title: "Introduction to Computing",
+    semester: 1,
     terms: [
       {
         term: "Computer",
@@ -114,6 +120,7 @@ export const VOCABULARY: VocabSubject[] = [
   {
     code: "CS201",
     title: "Introduction to Programming",
+    semester: 1,
     terms: [
       {
         term: "Variable",
@@ -225,6 +232,7 @@ export const VOCABULARY: VocabSubject[] = [
   {
     code: "ENG101",
     title: "English Comprehension",
+    semester: 1,
     terms: [
       {
         term: "Reading Comprehension",
@@ -321,6 +329,7 @@ export const VOCABULARY: VocabSubject[] = [
   {
     code: "MTH202",
     title: "Discrete Mathematics",
+    semester: 1,
     terms: [
       {
         term: "Proposition",
@@ -432,6 +441,7 @@ export const VOCABULARY: VocabSubject[] = [
   {
     code: "MTH5101",
     title: "Calculus I",
+    semester: 1,
     terms: [
       {
         term: "Limit",
@@ -538,6 +548,7 @@ export const VOCABULARY: VocabSubject[] = [
   {
     code: "PSY101",
     title: "Introduction to Psychology",
+    semester: 1,
     terms: [
       {
         term: "Psychology",
@@ -654,6 +665,7 @@ export const VOCABULARY: VocabSubject[] = [
   {
     code: "ECO401",
     title: "Economics",
+    semester: 1,
     terms: [
       {
         term: "Economics",
@@ -765,6 +777,7 @@ export const VOCABULARY: VocabSubject[] = [
   {
     code: "MCM101",
     title: "Introduction to Mass Communication",
+    semester: 1,
     terms: [
       {
         term: "Communication",
@@ -861,6 +874,7 @@ export const VOCABULARY: VocabSubject[] = [
   {
     code: "SOC101",
     title: "Introduction to Sociology",
+    semester: 1,
     terms: [
       {
         term: "Sociology",
@@ -961,6 +975,262 @@ export const VOCABULARY: VocabSubject[] = [
         term: "Anomie",
         definition:
           "Durkheim's term for a state of normlessness — when society's norms are weak or unclear, individuals feel disconnected.",
+      },
+    ],
+  },
+  {
+    code: "VU001",
+    title: "Introduction to e-Learning",
+    semester: 1,
+    terms: [
+      {
+        term: "e-Learning",
+        definition:
+          "Education delivered electronically — lectures, materials, activities and assessment delivered through the internet instead of a physical classroom.",
+      },
+      {
+        term: "LMS (Learning Management System)",
+        definition:
+          "The software platform that delivers course content, tracks student progress, and manages assignments and grades. VU's LMS is called VULMS.",
+      },
+      {
+        term: "VULMS",
+        definition:
+          "Virtual University Learning Management System — the student portal where you access your course websites, lectures, assignments, quizzes, and grades.",
+      },
+      {
+        term: "Course Website",
+        definition:
+          "Each course's own page inside VULMS, holding its lesson overview, handouts, video lectures, announcements, and activities.",
+      },
+      {
+        term: "e-Lecture",
+        definition:
+          "A recorded video lecture by the course instructor that can be streamed or downloaded and watched at any time.",
+      },
+      {
+        term: "GDB (Graded Discussion Board)",
+        definition:
+          "A graded discussion activity: post a thoughtful, original reply to the given topic within the allowed time. Copied answers earn zero.",
+      },
+      {
+        term: "MDB (Moderated Discussion Board)",
+        definition:
+          "A per-course question-and-answer forum where instructors and moderators resolve students' queries. Not graded.",
+      },
+      {
+        term: "Assignment",
+        definition:
+          "A graded task uploaded through the LMS before a deadline — part of the 40% semester work along with quizzes and GDBs.",
+      },
+      {
+        term: "Online Quiz",
+        definition:
+          "A timed multiple-choice quiz taken on the course website, usually open for a limited window of a day or two.",
+      },
+      {
+        term: "Semester Work",
+        definition:
+          "Everything except the final exam — assignments, quizzes, GDBs and the midterm — worth 40% of the total marks.",
+      },
+      {
+        term: "Proctored Exam",
+        definition:
+          "A computer-based exam taken under formal invigilation at a designated exam center using special exam software — never casually from home.",
+      },
+      {
+        term: "Date Sheet",
+        definition:
+          "The portal where students choose their own exam city, center, date and time slot. Book early for a convenient center.",
+      },
+      {
+        term: "Academic Calendar",
+        definition:
+          "The official schedule of the semester — start and end dates, midterm and final windows, breaks, and result announcements.",
+      },
+      {
+        term: "Plagiarism",
+        definition:
+          "Copying someone else's words or work and presenting it as your own. VU treats it as a serious violation — always write in your own words.",
+      },
+    ],
+  },
+  {
+    code: "CS201P",
+    title: "Introduction to Programming (Practical)",
+    semester: 1,
+    terms: [
+      {
+        term: "Source Code",
+        definition:
+          "The human-readable program you write in a language like C++, saved in a source file such as program.cpp.",
+      },
+      {
+        term: "IDE (Integrated Development Environment)",
+        definition:
+          "The application used to write, compile, and run programs — e.g. Dev-C++, Code::Blocks, or Visual Studio — combining editor, compiler, and debugger in one place.",
+      },
+      {
+        term: "Compiling",
+        definition:
+          "Translating your source code into machine (object) code. A program must compile cleanly before it can run.",
+      },
+      {
+        term: "Linking",
+        definition:
+          "Combining your compiled object code with library code to produce the final executable file (.exe). The compiler and linker together build the program.",
+      },
+      {
+        term: "Syntax Error",
+        definition:
+          "A grammar mistake — a missing semicolon, unmatched brace, misspelled keyword. The compiler catches it and refuses to compile until it is fixed.",
+      },
+      {
+        term: "Runtime Error",
+        definition:
+          "An error that appears only while the program runs — e.g. dividing by zero — often crashing the program mid-execution.",
+      },
+      {
+        term: "Logic Error",
+        definition:
+          "The hardest kind to find: the program compiles and runs happily but produces wrong results because the algorithm itself is flawed.",
+      },
+      {
+        term: "Debugging",
+        definition:
+          "The systematic process of finding and fixing errors — tracing values, printing intermediate results, and testing with known inputs.",
+      },
+      {
+        term: "Breakpoint",
+        definition:
+          "A marker set in the debugger that pauses program execution at that line so you can inspect variable values step by step.",
+      },
+      {
+        term: "Header File",
+        definition:
+          "A file included at the top of a program with #include (e.g. <iostream>) that provides ready-made declarations — input/output, math functions, and more.",
+      },
+      {
+        term: "Standard Input/Output (cin, cout)",
+        definition:
+          "In C++, cin reads input from the keyboard and cout prints output to the screen — the basic channels for user interaction.",
+      },
+      {
+        term: "Test Data",
+        definition:
+          "Deliberately chosen input values used to check whether a program works — include normal, boundary, and invalid cases.",
+      },
+      {
+        term: "Comment",
+        definition:
+          "A note written for humans inside the code (// line or /* block */) that the compiler ignores completely.",
+      },
+    ],
+  },
+  {
+    code: "MTH100",
+    title: "General Mathematics",
+    semester: 1,
+    terms: [
+      {
+        term: "Number Systems",
+        definition:
+          "The families of numbers: natural (1, 2, 3…), whole (adding 0), integers (adding negatives), rational (fractions p/q), and irrational (like √2, π).",
+      },
+      {
+        term: "Real Numbers",
+        definition:
+          "All rational and irrational numbers together — every point on the number line. Denoted ℝ.",
+      },
+      {
+        term: "Order of Operations (BODMAS)",
+        definition:
+          "The rule for evaluating expressions: Brackets, Orders (powers/roots), Division and Multiplication (left to right), Addition and Subtraction (left to right).",
+      },
+      {
+        term: "Percentage",
+        definition:
+          "A fraction of 100. To find x% of a number, multiply by x/100 — e.g. 25% of 80 = 20.",
+      },
+      {
+        term: "Ratio",
+        definition:
+          "A comparison of two quantities of the same kind, written a : b — e.g. a class with 15 girls and 10 boys has ratio 3 : 2.",
+      },
+      {
+        term: "Proportion",
+        definition:
+          "An equality of two ratios: a : b = c : d. If three parts are known, the fourth is found by cross-multiplying (ad = bc).",
+      },
+      {
+        term: "Direct Variation",
+        definition:
+          "Two quantities increase or decrease together so that y/x stays constant: y = kx — e.g. more hours worked, more pay earned.",
+      },
+      {
+        term: "Inverse Variation",
+        definition:
+          "One quantity increases as the other decreases so their product stays constant: xy = k — e.g. more workers, fewer days for the same job.",
+      },
+      {
+        term: "Algebraic Expression",
+        definition:
+          "A combination of variables, constants, and operators, e.g. 3x² − 5x + 2. A term is a single part; a polynomial is a sum of terms.",
+      },
+      {
+        term: "Linear Equation",
+        definition:
+          "An equation whose graph is a straight line, of the form y = mx + c — slope m, intercept c. Solving ax + b = 0 gives x = −b/a.",
+      },
+      {
+        term: "Quadratic Equation",
+        definition:
+          "An equation of degree 2: ax² + bx + c = 0, a ≠ 0. Solved by factorization, completing the square, or the quadratic formula x = (−b ± √(b² − 4ac)) / 2a.",
+      },
+      {
+        term: "Discriminant",
+        definition:
+          "The quantity b² − 4ac. Positive: two distinct real roots; zero: one repeated root; negative: no real roots.",
+      },
+      {
+        term: "Laws of Exponents",
+        definition:
+          "Rules for powers: aᵐ·aⁿ = aᵐ⁺ⁿ, aᵐ/aⁿ = aᵐ⁻ⁿ, (aᵐ)ⁿ = aᵐⁿ, a⁰ = 1, and a⁻ⁿ = 1/aⁿ.",
+      },
+      {
+        term: "Logarithm",
+        definition:
+          "The inverse of exponentiation: if aˣ = y then log base a of y = x. Key use: log turns multiplication into addition.",
+      },
+      {
+        term: "Matrix",
+        definition:
+          "A rectangular arrangement of numbers in rows and columns. Its order is rows × columns — a 2×3 matrix has 2 rows and 3 columns.",
+      },
+      {
+        term: "Types of Matrices",
+        definition:
+          "Row matrix (single row), column matrix (single column), square matrix (equal rows and columns), and identity matrix I (square with 1s on the diagonal and 0s elsewhere).",
+      },
+      {
+        term: "Matrix Operations",
+        definition:
+          "Addition/subtraction works entry-by-entry for same-order matrices; multiplication multiplies rows into columns — defined only when the columns of the first equal the rows of the second. Generally AB ≠ BA.",
+      },
+      {
+        term: "Determinant",
+        definition:
+          "A single number computed from a square matrix — for [[a,b],[c,d]] it is ad − bc. A determinant of 0 means the matrix has no inverse.",
+      },
+      {
+        term: "Arithmetic Sequence",
+        definition:
+          "A sequence with a constant common difference d: a, a+d, a+2d, … Its nth term is a + (n−1)d.",
+      },
+      {
+        term: "Geometric Sequence",
+        definition:
+          "A sequence with a constant common ratio r: a, ar, ar², … Its nth term is a·rⁿ⁻¹.",
       },
     ],
   },

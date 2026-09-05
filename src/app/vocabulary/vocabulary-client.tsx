@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { VOCABULARY, VOCAB_BY_CODE, type VocabSubject } from "@/lib/vocabulary";
+import { VOCABULARY, VOCAB_BY_CODE, VOCAB_SEMESTERS, TOTAL_SEMESTERS } from "@/lib/vocabulary";
 
 type Card = { code: string; term: string; definition: string };
 
@@ -15,19 +15,24 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-function buildPool(code: string): Card[] {
+function buildPool(code: string, semester: number): Card[] {
   if (code && VOCAB_BY_CODE[code]) {
     return VOCAB_BY_CODE[code].terms.map((t) => ({ code, ...t }));
   }
-  return VOCABULARY.flatMap((s) => s.terms.map((t) => ({ code: s.code, ...t })));
+  return VOCABULARY.filter((s) => s.semester === semester).flatMap((s) =>
+    s.terms.map((t) => ({ code: s.code, ...t })),
+  );
 }
 
 export default function VocabularyClient() {
   const searchParams = useSearchParams();
   const initialSubject = searchParams.get("subject") ?? "";
-  const [subjectCode, setSubjectCode] = useState(
-    initialSubject && VOCAB_BY_CODE[initialSubject] ? initialSubject : "",
-  );
+  const initial =
+    initialSubject && VOCAB_BY_CODE[initialSubject]
+      ? VOCAB_BY_CODE[initialSubject]
+      : null;
+  const [semester, setSemester] = useState(initial?.semester ?? 1);
+  const [subjectCode, setSubjectCode] = useState(initial?.code ?? "");
 
   const [mode, setMode] = useState<"list" | "cards">("list");
   const [query, setQuery] = useState("");
@@ -36,7 +41,13 @@ export default function VocabularyClient() {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
-  const pool = useMemo(() => buildPool(subjectCode), [subjectCode]);
+  const pool = useMemo(() => buildPool(subjectCode, semester), [subjectCode, semester]);
+
+  const semesterSubjects = useMemo(
+    () => VOCABULARY.filter((s) => s.semester === semester),
+    [semester],
+  );
+  const hasData = VOCAB_SEMESTERS.includes(semester);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -48,24 +59,33 @@ export default function VocabularyClient() {
     );
   }, [pool, query]);
 
-  // Selecting a subject or switching mode starts a fresh deck (event-driven,
+  // Selecting a subject, semester, or mode starts a fresh deck (event-driven,
   // no setState-in-effect)
   function selectSubject(code: string) {
     setSubjectCode(code);
-    setDeck(shuffle(buildPool(code)));
+    setDeck(shuffle(buildPool(code, semester)));
+    setIndex(0);
+    setFlipped(false);
+  }
+
+  function selectSemester(sem: number) {
+    setSemester(sem);
+    setSubjectCode("");
+    setQuery("");
+    setDeck(shuffle(buildPool("", sem)));
     setIndex(0);
     setFlipped(false);
   }
 
   function switchMode(m: "list" | "cards") {
     setMode(m);
-    setDeck(shuffle(buildPool(subjectCode)));
+    setDeck(shuffle(buildPool(subjectCode, semester)));
     setIndex(0);
     setFlipped(false);
   }
 
   const reshuffle = () => {
-    setDeck(shuffle(buildPool(subjectCode)));
+    setDeck(shuffle(buildPool(subjectCode, semester)));
     setIndex(0);
     setFlipped(false);
   };
@@ -101,9 +121,9 @@ export default function VocabularyClient() {
     {
       code: "",
       label: "All subjects",
-      count: pool.length,
+      count: semesterSubjects.reduce((n, s) => n + s.terms.length, 0),
     },
-    ...VOCABULARY.map((s: VocabSubject) => ({
+    ...semesterSubjects.map((s) => ({
       code: s.code,
       label: s.code,
       count: s.terms.length,
@@ -114,12 +134,32 @@ export default function VocabularyClient() {
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-3xl font-bold tracking-tight">Vocabulary</h1>
       <p className="mt-2 max-w-2xl text-black/60 dark:text-white/60">
-        Every key term you&apos;re expected to know in semester 1 — with
-        exam-ready definitions. Flip through the flashcards or search the list.
+        Every key term you&apos;re expected to know — with exam-ready
+        definitions. Semester 1 is fully live; later semesters unlock as our
+        batch moves forward. Flip through the flashcards or search the list.
       </p>
 
-      {/* Mode toggle */}
+      {/* Semester + mode controls */}
       <div className="mt-6 flex flex-wrap items-center gap-3">
+        <label className="flex items-center gap-2 rounded-xl border border-black/15 bg-white px-3 py-2 text-sm dark:border-white/20 dark:bg-[#0a0a0a]">
+          <span className="text-black/60 dark:text-white/60">Semester</span>
+          <select
+            value={semester}
+            onChange={(e) => selectSemester(Number(e.target.value))}
+            className="bg-transparent font-medium focus:outline-none"
+            aria-label="Select semester"
+          >
+            {Array.from({ length: TOTAL_SEMESTERS }, (_, i) => i + 1).map(
+              (n) => (
+                <option key={n} value={n} disabled={!VOCAB_SEMESTERS.includes(n)}>
+                  Semester {n}
+                  {VOCAB_SEMESTERS.includes(n) ? "" : " — coming soon"}
+                </option>
+              ),
+            )}
+          </select>
+        </label>
+        {hasData && (
         <div className="inline-flex overflow-hidden rounded-xl border border-black/15 bg-white dark:border-white/20 dark:bg-[#0a0a0a]">
           <button
             onClick={() => switchMode("list")}
@@ -142,8 +182,9 @@ export default function VocabularyClient() {
             🃏 Flashcards
           </button>
         </div>
+        )}
 
-        {mode === "list" && (
+        {hasData && mode === "list" && (
           <input
             type="search"
             value={query}
@@ -154,6 +195,8 @@ export default function VocabularyClient() {
         )}
       </div>
 
+      {hasData ? (
+      <>
       {/* Subject chips */}
       <div className="mt-4 flex flex-wrap gap-2">
         {subjectChips.map((chip) => {
@@ -305,6 +348,25 @@ export default function VocabularyClient() {
             </div>
           )}
         </>
+      )}
+      </>
+      ) : (
+        <div className="mt-10 rounded-2xl border border-dashed border-black/15 p-10 text-center dark:border-white/15">
+          <p className="text-4xl">🔒</p>
+          <h2 className="mt-3 text-xl font-semibold">
+            Semester {semester} vocabulary — coming soon
+          </h2>
+          <p className="mx-auto mt-2 max-w-md text-sm text-black/55 dark:text-white/55">
+            Vocabulary for later semesters unlocks as our batch moves forward.
+            Semester 1 is fully live — switch back and start learning.
+          </p>
+          <button
+            onClick={() => selectSemester(1)}
+            className="mt-5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-6 py-3 font-semibold text-white shadow-md shadow-emerald-500/25 transition hover:shadow-lg"
+          >
+            Go to Semester 1 →
+          </button>
+        </div>
       )}
     </div>
   );
