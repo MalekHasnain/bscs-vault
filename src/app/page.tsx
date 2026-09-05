@@ -32,9 +32,9 @@ const features = [
   },
   {
     title: "Handouts Library",
-    desc: "Course handouts shared by students, per subject — contribute what you have, help the next batch.",
+    desc: "Contribute and browse course handouts per subject. This section is being built — help us grow it.",
     href: "/subjects",
-    cta: "Find handouts",
+    cta: "Browse & contribute",
     icon: "📚",
     gradient: "from-amber-500/15 to-amber-500/5",
   },
@@ -54,20 +54,20 @@ export default async function Home() {
   return (
     <div className="mx-auto max-w-6xl px-4">
       {/* Hero */}
-      <section className="py-20 text-center sm:py-28">
+      <section className="py-16 text-center sm:py-24">
         <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           {questionCount ?? 0} real past-paper questions and counting
         </div>
-        <h1 className="mx-auto mt-6 max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
-          Everything you need to survive{" "}
+        <h1 className="mx-auto mt-5 max-w-4xl text-5xl font-bold tracking-[-1.5px] sm:text-7xl">
+          Everything you need to{" "}
           <span className="bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 bg-clip-text text-transparent">
-            VU BSCS
+            survive VU BSCS
           </span>
         </h1>
- <p className="mx-auto mt-6 max-w-2xl text-lg text-black/60 dark:text-white/60">
-          A free, student-built vault: past papers, MCQ practice, handouts and
-          GPA tools — built by a semester-1 student, for every VU BSCS student.
+        <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-black/60 dark:text-white/60">
+          A free student-built vault with real past papers, MCQ practice, 
+          GPA tools and handouts — made by a semester-1 student for everyone.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
@@ -85,22 +85,23 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Feature cards */}
-      <section className="grid grid-cols-1 gap-5 pb-16 sm:grid-cols-2">
-        {features.map((f) => (
+      {/* Feature cards — more distinct and eye-catching */}
+      <section className="grid grid-cols-1 gap-4 pb-14 sm:grid-cols-2 lg:grid-cols-4">
+        {features.map((f, index) => (
           <Link
             key={f.title}
             href={f.href}
-            className={`group rounded-2xl border border-black/10 bg-gradient-to-br p-7 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10 ${f.gradient}`}
+            className={`group relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-white/10 ${f.gradient}`}
           >
-            <div className="text-3xl">{f.icon}</div>
-            <h2 className="mt-4 text-xl font-bold">{f.title}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-black/60 dark:text-white/60">
+            <div className="text-4xl mb-4 transition-transform group-hover:scale-110">{f.icon}</div>
+            <h3 className="text-lg font-semibold leading-tight">{f.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-black/65 dark:text-white/65 line-clamp-3">
               {f.desc}
             </p>
-            <span className="mt-4 inline-block text-sm font-semibold text-emerald-700 transition group-hover:underline dark:text-emerald-400">
-              {f.cta} →
-            </span>
+            <div className="mt-5 flex items-center text-sm font-medium text-emerald-700 group-hover:text-emerald-600 dark:text-emerald-400">
+              {f.cta} 
+              <span className="ml-1.5 transition-transform group-hover:translate-x-0.5">→</span>
+            </div>
           </Link>
         ))}
       </section>

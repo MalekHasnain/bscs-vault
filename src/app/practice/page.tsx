@@ -321,6 +321,38 @@ export default function PracticePage() {
     deficiency: "Deficiency",
     elective: "Elective",
   };
+
+  // Modern tier styling for eye-catching design
+  const tierStyles: Record<string, { 
+    header: string; 
+    accent: string; 
+    cardBorder: string; 
+    cardActive: string;
+    badge: string;
+  }> = {
+    required: {
+      header: "text-emerald-700 dark:text-emerald-400",
+      accent: "emerald",
+      cardBorder: "border-emerald-500/20 hover:border-emerald-500/40",
+      cardActive: "border-emerald-500 bg-emerald-500/10 shadow-md shadow-emerald-500/10",
+      badge: "bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400",
+    },
+    deficiency: {
+      header: "text-amber-700 dark:text-amber-400",
+      accent: "amber",
+      cardBorder: "border-amber-500/20 hover:border-amber-500/40",
+      cardActive: "border-amber-500 bg-amber-500/10 shadow-md shadow-amber-500/10",
+      badge: "bg-amber-500/10 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400",
+    },
+    elective: {
+      header: "text-violet-700 dark:text-violet-400",
+      accent: "violet",
+      cardBorder: "border-violet-500/20 hover:border-violet-500/40",
+      cardActive: "border-violet-500 bg-violet-500/10 shadow-md shadow-violet-500/10",
+      badge: "bg-violet-500/10 text-violet-700 dark:bg-violet-500/20 dark:text-violet-400",
+    },
+  };
+
   const byTier = subjects.reduce<Record<string, Subject[]>>((acc, s) => {
     const t = s.course_type ?? "required";
     (acc[t] ??= []).push(s);
@@ -332,21 +364,21 @@ export default function PracticePage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
-      <h1 className="text-3xl font-bold">Practice MCQs</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Practice MCQs</h1>
       <p className="mt-2 max-w-2xl text-black/60 dark:text-white/60">
         Every question here was submitted from a real VU past paper. Pick a
         subject card to load its MCQs, choose how many, and go.
       </p>
 
-      {/* Quick controls */}
-      <div className="mt-6 flex flex-wrap items-center gap-3">
-        <div className="inline-flex overflow-hidden rounded-xl border border-black/15 dark:border-white/20">
+      {/* Improved quick controls - more integrated and modern */}
+      <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-black/10 bg-black/5 p-2 dark:border-white/10 dark:bg-white/5">
+        <div className="inline-flex overflow-hidden rounded-xl border border-black/15 bg-white dark:border-white/20 dark:bg-[#0a0a0a]">
           <button
             onClick={() => {
               setSelected("");
               void loadQuestions("");
             }}
-            className={`px-4 py-2 text-sm font-medium transition ${
+            className={`px-5 py-2 text-sm font-medium transition ${
               selected === ""
                 ? "bg-emerald-600 text-white"
                 : "hover:bg-black/5 dark:hover:bg-white/10"
@@ -355,12 +387,13 @@ export default function PracticePage() {
             All subjects
           </button>
         </div>
-        <label className="flex items-center gap-2 text-sm">
-          <span className="text-black/60 dark:text-white/60">Questions:</span>
+
+        <div className="flex items-center gap-2 rounded-xl border border-black/15 bg-white px-3 py-1.5 text-sm dark:border-white/20 dark:bg-[#0a0a0a]">
+          <span className="text-black/60 dark:text-white/60">Questions</span>
           <select
             value={count}
             onChange={(e) => setCount(Number(e.target.value))}
-            className="rounded-lg border border-black/15 bg-transparent px-3 py-1.5 dark:border-white/20"
+            className="bg-transparent font-medium focus:outline-none"
           >
             {[5, 10, 15, 20, 30, 50].map((n) => (
               <option key={n} value={n}>
@@ -368,69 +401,84 @@ export default function PracticePage() {
               </option>
             ))}
           </select>
-        </label>
+        </div>
+
         {loading && (
           <span className="text-sm text-black/50 dark:text-white/50">
-            Loading…
+            Loading questions…
           </span>
         )}
       </div>
 
-      {/* Subject cards by tier */}
+      {/* Subject cards by tier — now more eye-catching */}
       <div className="mt-8 space-y-10">
-        {tiers.map(([tier, list]) => (
-          <section key={tier}>
-            <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-black/50 dark:text-white/50">
-              {tierLabel[tier] ?? tier}
-              <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs font-medium normal-case tracking-normal dark:bg-white/10">
-                {list.length}
-              </span>
-            </h2>
-            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-              {list.map((s) => {
-                const n = mcqCounts[s.id] ?? 0;
-                const active = selected === s.code;
-                return (
-                  <button
-                    key={s.id}
-                    onClick={() => {
-                      setSelected(s.code);
-                      void loadQuestions(s.code);
-                    }}
-                    className={`group rounded-2xl border p-4 text-left transition ${
-                      active
-                        ? "border-emerald-500 bg-emerald-500/10 shadow-md shadow-emerald-500/10"
-                        : "border-black/10 hover:-translate-y-0.5 hover:border-emerald-500/60 hover:shadow-md dark:border-white/10"
-                    } ${n === 0 ? "opacity-55" : ""}`}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="font-mono text-lg font-bold">
-                        {s.code}
-                      </span>
-                      {active && (
-                        <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-bold uppercase text-white">
-                          Selected
-                        </span>
-                      )}
-                    </div>
-                    <p className="mt-1 line-clamp-2 min-h-[2.5rem] text-xs text-black/60 dark:text-white/60">
-                      {s.title}
-                    </p>
-                    <p
-                      className={`mt-2 text-sm font-semibold ${
-                        n > 0
-                          ? "text-emerald-600 dark:text-emerald-400"
-                          : "text-black/40 dark:text-white/40"
-                      }`}
+        {tiers.map(([tier, list]) => {
+          const styles = tierStyles[tier] || tierStyles.required;
+          return (
+            <section key={tier}>
+              <div className="mb-3 flex items-center gap-3">
+                <h2 className={`text-sm font-semibold uppercase tracking-[1.5px] ${styles.header}`}>
+                  {tierLabel[tier] ?? tier}
+                </h2>
+                <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${styles.badge}`}>
+                  {list.length} subjects
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                {list.map((s) => {
+                  const n = mcqCounts[s.id] ?? 0;
+                  const active = selected === s.code;
+                  return (
+                    <button
+                      key={s.id}
+                      onClick={() => {
+                        setSelected(s.code);
+                        void loadQuestions(s.code);
+                      }}
+                      className={`group rounded-2xl border p-5 text-left transition-all ${
+                        active 
+                          ? styles.cardActive 
+                          : `border-black/10 bg-white hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-[#0a0a0a] ${styles.cardBorder}`
+                      } ${n === 0 ? "opacity-60" : ""}`}
                     >
-                      {n > 0 ? `${n} MCQs` : "No MCQs yet"}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
-        ))}
+                      <div className="flex items-start justify-between">
+                        <span className="font-mono text-xl font-bold tracking-tight">
+                          {s.code}
+                        </span>
+                        {active && (
+                          <span className="rounded-full bg-emerald-600 px-2 py-px text-[10px] font-bold uppercase tracking-wider text-white">
+                            Selected
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="mt-2 line-clamp-2 min-h-[2.8rem] text-sm leading-snug text-black/70 dark:text-white/70">
+                        {s.title}
+                      </p>
+
+                      <div className="mt-4 flex items-center justify-between">
+                        <p className={`text-sm font-semibold ${
+                          n > 0 
+                            ? `text-${styles.accent}-600 dark:text-${styles.accent}-400` 
+                            : "text-black/40 dark:text-white/40"
+                        }`}>
+                          {n > 0 ? `${n} MCQs available` : "No MCQs yet"}
+                        </p>
+
+                        {n > 0 && (
+                          <span className="text-[10px] font-medium text-black/40 group-hover:text-black/60 dark:text-white/40 dark:group-hover:text-white/60">
+                            Start →
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
       </div>
 
       {/* Loaded pool → start */}
