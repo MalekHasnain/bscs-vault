@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase-server";
 import { FALL_2026_NOTICES } from "@/lib/notices";
 import { NEW_STUDENT_FAQS } from "@/lib/faqs";
 import { TOTAL_VOCAB_TERMS } from "@/lib/vocabulary";
+import { HANDOUT_SUBJECT_COUNT } from "@/lib/handouts";
 
 export const revalidate = 3600; // ISR: keep stats and teasers fresh
 
@@ -33,9 +34,9 @@ const features = [
   },
   {
     title: "Handouts Library",
-    desc: "Contribute and browse course handouts per subject. This section is being built — help us grow it.",
+    desc: `Official VU handouts for ${HANDOUT_SUBJECT_COUNT} core subjects — one-click PDF download on every subject page. Community links welcome too.`,
     href: "/subjects",
-    cta: "Browse & contribute",
+    cta: "Download handouts",
     icon: "📚",
     gradient: "from-amber-500/15 to-amber-500/5",
   },

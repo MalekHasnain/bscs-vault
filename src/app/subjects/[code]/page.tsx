@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
 import { VOCAB_BY_CODE } from "@/lib/vocabulary";
+import { HANDOUTS_BY_CODE } from "@/lib/handouts";
 
 type Params = { code: string };
 
@@ -39,6 +40,7 @@ export default async function SubjectPage({
   const mcqs = (questions ?? []).filter((q) => q.q_type === "mcq");
   const shorts = (questions ?? []).filter((q) => q.q_type === "short");
   const longs = (questions ?? []).filter((q) => q.q_type === "long");
+  const curatedHandouts = HANDOUTS_BY_CODE[subject.code] ?? [];
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -81,10 +83,10 @@ export default async function SubjectPage({
         )}
       </div>
 
-      {/* Handouts */}
+      {/* Handouts — official downloads + community links */}
       <section className="mt-10">
         <h2 className="text-lg font-semibold">Handouts</h2>
-        {(handouts ?? []).length === 0 ? (
+        {(curatedHandouts.length === 0 && (handouts ?? []).length === 0) ? (
           <p className="mt-2 text-sm text-black/60 dark:text-white/60">
             No handouts yet.{" "}
             <Link
@@ -95,20 +97,94 @@ export default async function SubjectPage({
             </Link>
           </p>
         ) : (
-          <ul className="mt-3 divide-y divide-black/10 dark:divide-white/10">
-            {(handouts ?? []).map((h) => (
-              <li key={h.id} className="py-3">
-                <a
-                  href={h.file_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-emerald-700 hover:underline dark:text-emerald-400"
-                >
-                  {h.title}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <>
+            {/* Official curated handouts — download boxes */}
+            {curatedHandouts.length > 0 && (
+              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {curatedHandouts.map((h) => (
+                  <div
+                    key={h.url}
+                    className="flex flex-col justify-between gap-4 rounded-2xl border border-emerald-600/20 bg-gradient-to-br from-emerald-500/5 to-sky-500/5 p-5 transition hover:border-emerald-600/50 hover:shadow-md dark:border-emerald-500/20"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-red-500/10 text-2xl">
+                        📄
+                      </span>
+                      <div>
+                        <h3 className="text-sm font-semibold leading-snug">
+                          {h.title}
+                        </h3>
+                        {h.description && (
+                          <p className="mt-1 text-xs text-black/55 dark:text-white/55">
+                            {h.description}
+                          </p>
+                        )}
+                        <p className="mt-1 text-xs font-medium text-black/40 dark:text-white/40">
+                          PDF · Official VU handouts
+                        </p>
+                      </div>
+                    </div>
+                    <a
+                      href={h.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-emerald-500/25 transition hover:shadow-lg"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-4 w-4"
+                        aria-hidden
+                      >
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      Download PDF
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Community-submitted handouts */}
+            {(handouts ?? []).length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-black/50 dark:text-white/50">
+                  Community handouts
+                </h3>
+                <ul className="mt-2 divide-y divide-black/10 dark:divide-white/10">
+                  {(handouts ?? []).map((h) => (
+                    <li key={h.id} className="py-3">
+                      <a
+                        href={h.file_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+                      >
+                        {h.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <p className="mt-4 text-xs text-black/45 dark:text-white/45">
+              Have a handout that&apos;s missing?{" "}
+              <Link
+                href={`/submit?subject=${subject.code}&type=handout`}
+                className="text-emerald-600 hover:underline dark:text-emerald-400"
+              >
+                Share it with everyone →
+              </Link>
+            </p>
+          </>
         )}
       </section>
 
