@@ -1,0 +1,19 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bv" x1="4" y1="4" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#10b981"/>
+      <stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#bv)"/>
+  <!-- graduation cap: mortarboard -->
+  <path d="M32 15 L53 24.5 L32 34 L11 24.5 Z" fill="#ffffff"/>
+  <!-- cap base -->
+  <path d="M20.5 29.2 V38.5 C20.5 42 25.8 44.5 32 44.5 C38.2 44.5 43.5 42 43.5 38.5 V29.2 L32 34.8 Z" fill="#ffffff" fill-opacity="0.9"/>
+  <!-- tassel -->
+  <path d="M51.3 25.2 V33.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="51.3" cy="36.2" r="2.4" fill="#ffffff"/>
+  <!-- vault keyhole on the cap -->
+  <circle cx="32" cy="28.6" r="3.1" fill="#065f46"/>
+  <path d="M30.7 31 h2.6 l1.3 5 h-5.2 z" fill="#065f46"/>
+</svg>

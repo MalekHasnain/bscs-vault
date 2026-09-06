@@ -48,6 +48,14 @@ const features = [
     icon: "🧠",
     gradient: "from-rose-500/15 to-rose-500/5",
   },
+  {
+    title: "Blog & Guides",
+    desc: "Student-written guides on cracking semester work, exams and surviving VU — fresh articles added regularly.",
+    href: "/blog",
+    cta: "Read the blog",
+    icon: "✍️",
+    gradient: "from-teal-500/15 to-teal-500/5",
+  },
 ];
 
 export default async function Home() {
@@ -96,25 +104,21 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Feature cards — more distinct and eye-catching */}
-      <section className="grid grid-cols-1 gap-4 pb-14 sm:grid-cols-2 lg:grid-cols-4">
-        {features.map((f, index) => (
+      {/* Feature cards — equal size, 3-across on desktop */}
+      <section className="grid grid-cols-1 gap-4 pb-14 sm:grid-cols-2 lg:grid-cols-3">
+        {features.map((f) => (
           <Link
             key={f.title}
             href={f.href}
-            className={`group relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-white/10 ${f.gradient} ${
-              index === features.length - 1 && features.length % 2 === 1
-                ? "sm:col-span-2 lg:col-span-2"
-                : ""
-            }`}
+            className={`group flex flex-col overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-white/10 ${f.gradient}`}
           >
             <div className="text-4xl mb-4 transition-transform group-hover:scale-110">{f.icon}</div>
             <h3 className="text-lg font-semibold leading-tight">{f.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-black/65 dark:text-white/65 line-clamp-3">
+            <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-black/65 dark:text-white/65">
               {f.desc}
             </p>
             <div className="mt-5 flex items-center text-sm font-medium text-emerald-700 group-hover:text-emerald-600 dark:text-emerald-400">
-              {f.cta} 
+              {f.cta}
               <span className="ml-1.5 transition-transform group-hover:translate-x-0.5">→</span>
             </div>
           </Link>

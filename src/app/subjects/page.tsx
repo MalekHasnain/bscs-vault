@@ -48,9 +48,10 @@ export default async function SubjectsPage() {
     <div className="mx-auto max-w-5xl px-4 py-10">
       <h1 className="text-3xl font-bold">Subjects</h1>
       <p className="mt-2 text-black/60 dark:text-white/60">
-        The VU BSCS study scheme, semester by semester. Semester 1 is fully
-        live — we&apos;re filling it with past papers and MCQs over the coming
-        months, and later semesters unlock as our batch moves forward.
+        The complete VU BSCS study scheme, semester by semester — every
+        subject from semester 1 to 8, with handout downloads on each page.
+        Past papers and MCQs are filling up semester by semester as our
+        batch moves forward.
       </p>
 
       {ALL_SEMESTERS.map((semester) => {
@@ -95,8 +96,8 @@ export default async function SubjectsPage() {
               </div>
             ) : (
               <p className="mt-3 rounded-xl border border-dashed border-black/15 p-4 text-sm text-black/40 dark:border-white/15 dark:text-white/40">
-                Opens when we reach semester {semester}. Subjects will be added
-                from the official VU study scheme as we go.
+                Subjects for semester {semester} will be added once confirmed
+                from the official VU study scheme.
               </p>
             )}
           </section>

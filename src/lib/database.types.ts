@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type -- generated-style DB types */
 export type Database = {
   public: {
     Tables: {
@@ -159,6 +160,64 @@ export type Database = {
           },
         ];
       };
+      posts: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          excerpt: string | null;
+          content: string;
+          cover_image_url: string | null;
+          tags: string[];
+          meta_title: string | null;
+          meta_description: string | null;
+          status: "draft" | "published";
+          published_at: string | null;
+          created_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          title: string;
+          excerpt?: string | null;
+          content: string;
+          cover_image_url?: string | null;
+          tags?: string[];
+          meta_title?: string | null;
+          meta_description?: string | null;
+          status?: "draft" | "published";
+          published_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          title?: string;
+          excerpt?: string | null;
+          content?: string;
+          cover_image_url?: string | null;
+          tags?: string[];
+          meta_title?: string | null;
+          meta_description?: string | null;
+          status?: "draft" | "published";
+          published_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "posts_created_by_fkey";
+            columns: ["created_by"];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       // no views yet
@@ -173,3 +232,4 @@ export type Subject = Database["public"]["Tables"]["subjects"]["Row"];
 export type Question = Database["public"]["Tables"]["questions"]["Row"];
 export type Handout = Database["public"]["Tables"]["handouts"]["Row"];
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+export type Post = Database["public"]["Tables"]["posts"]["Row"];

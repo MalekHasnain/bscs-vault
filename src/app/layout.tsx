@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase-server";
+import { SITE_URL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,12 +16,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "BSCS Vault — VU Past Papers, MCQs, GPA Tools & Handouts",
-    template: "%s — BSCS Vault",
+    default: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    template: `%s — ${SITE_NAME}`,
   },
   description:
-    "Free student-built hub for Virtual University BSCS students: past papers, MCQ practice, handouts, GPA calculator and CGPA projector.",
+    "Free student-built hub for Virtual University BSCS students: past papers, MCQ practice, handouts, vocabulary, GPA calculator and CGPA projector.",
+  openGraph: {
+    siteName: SITE_NAME,
+    type: "website",
+  },
 };
 
 export default async function RootLayout({
@@ -55,10 +61,15 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <header className="sticky top-0 z-50 border-b border-black/10 bg-white/70 backdrop-blur-md dark:border-white/10 dark:bg-[#0a0a0a]/70">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-            <Link href="/" className="flex items-center gap-2 font-bold">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-sky-500 text-sm text-white shadow-md">
-                BV
-              </span>
+            <Link href="/" className="flex items-center gap-2.5 font-bold">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.svg"
+                alt="BSCS Vault logo"
+                width={32}
+                height={32}
+                className="h-8 w-8 rounded-lg shadow-sm"
+              />
               <span className="hidden sm:inline">BSCS Vault</span>
             </Link>
             <nav className="flex items-center gap-1 text-sm sm:gap-2">
@@ -92,6 +103,12 @@ export default async function RootLayout({
                 className="hidden rounded-lg px-3 py-2 text-black/70 transition hover:bg-black/5 hover:text-black dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white md:block"
               >
                 Notices
+              </Link>
+              <Link
+                href="/blog"
+                className="rounded-lg px-3 py-2 text-black/70 transition hover:bg-black/5 hover:text-black dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
+              >
+                Blog
               </Link>
               <Link
                 href="/faq"
@@ -185,7 +202,7 @@ export default async function RootLayout({
             </p>
             <p>Created by Malik Hasnain</p>
             <p>
-              Past papers · MCQ practice · Vocabulary · Handouts ·{" "}
+              Past papers · MCQ practice · Vocabulary · Handouts · Blog ·{" "}
               <Link href="/gpa" className="underline hover:text-emerald-600">
                 GPA &amp; CGPA tools
               </Link>
